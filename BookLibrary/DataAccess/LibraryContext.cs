@@ -14,8 +14,6 @@ namespace DataAccess
         public DbSet<BlockedUser> BlockedUsers { get; set; }
         public DbSet<WishList> WishLists { get; set; }
 
-
-
         public LibraryContext(DbContextOptions<LibraryContext> options)
             : base(options)
         {

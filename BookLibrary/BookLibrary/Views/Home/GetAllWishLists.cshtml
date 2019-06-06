@@ -1,0 +1,18 @@
+﻿@using Microsoft.AspNetCore.Identity
+@{
+    ViewData["Title"] = "GetAllWishLists";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@inject UserManager<IdentityUser> UserManager
+
+@model List<string>
+<h2>All your wish lists</h2>
+@{string UserId = (await UserManager.GetUserAsync(User)).Id;
+    foreach (var n in Model)
+    {
+        <p>
+             <a asp-controller="Home" asp-action="GetWishList" asp-route-UserId="@UserId" asp-route-WishListName="@n">@n</a>
+        </p>
+    }
+}
+

@@ -70,7 +70,7 @@
 
             @if (signInManager.IsSignedIn(User))
             {
-                //await Html.RenderPartialAsync("~/Views/Home/_RatePartial.cshtml", new RateViewModel { RatedEssenceId = Model.Id, UserId = (await userManager.GetUserAsync(User)).Id });
+                await Html.RenderPartialAsync("~/Views/Home/_RatePartial.cshtml", new RateViewModel { RatedEssenceId = Model.Id, UserId = (await userManager.GetUserAsync(User)).Id });
                 await Html.RenderPartialAsync("~/Views/Home/_WishListPartial.cshtml", new WishListDTO { BookId = Model.Id, UserId = (await userManager.GetUserAsync(User)).Id});
             }
             else

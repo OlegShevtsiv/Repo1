@@ -20,7 +20,7 @@ namespace BookLibrary.Controllers
         private readonly IRateService _rateService;
         private readonly IWishListService _wlService;
 
-        public HomeController(IBookService bookService, IAuthorService authorService,  IRateService rateService, IWishListService wlService)
+        public HomeController(IBookService bookService, IAuthorService authorService, IRateService rateService, IWishListService wlService)
         {
             _bookService = bookService;
             _authorService = authorService;
@@ -33,7 +33,7 @@ namespace BookLibrary.Controllers
         {
             return View(_bookService.GetAll().ToList().OrderByDescending(b => b.Rate));
         }
-      
+
         [HttpPost]
         public IActionResult Search(string req)
         {
@@ -44,10 +44,10 @@ namespace BookLibrary.Controllers
             List<BookDTO> param = new List<BookDTO>();
             List<string> keys = req.Trim().Split(' ').ToList();
             List<BookDTO> allBooks = _bookService.GetAll().ToList();
-            for(int i = 0; i < keys.Count; i++)
+            for (int i = 0; i < keys.Count; i++)
             {
                 keys[i] = keys[i].ToLower().Trim();
-                foreach  (BookDTO book  in allBooks)
+                foreach (BookDTO book in allBooks)
                 {
                     if (book.Title.ToLower().Contains(keys[i]))
                     {
@@ -153,10 +153,10 @@ namespace BookLibrary.Controllers
                 return RedirectToAction("Error");
             }
             RateDTO yourRate = new RateDTO {
-                                               BookId = rateVM.RatedEssenceId,
-                                               UserId = rateVM.UserId,
-                                               Value = rateVM.Value
-                                           };
+                BookId = rateVM.RatedEssenceId,
+                UserId = rateVM.UserId,
+                Value = rateVM.Value
+            };
 
             List<RateDTO> allRates = _rateService.GetAll().ToList();
             if (allRates != null)
@@ -191,8 +191,27 @@ namespace BookLibrary.Controllers
                 _bookService.Update(bookTORate);
                 _rateService.Add(yourRate);
             }
-            
+
             return RedirectToAction("GetBookInfo", "Home", new { id = bookTORate.Id });
+        }
+
+        [HttpGet]
+        public IActionResult GetAllWishLists(string UserId)
+        {
+            List<string> Names = new List<string>();
+            foreach (var n in _wlService.Get(new WishListFilterByUserId { UserId = UserId }))
+            {
+                Names.Add(n.Name);
+            }
+            Names = Names.Distinct().ToList();
+            return View(Names);
+        }
+
+        [HttpGet]
+        public IActionResult GetWishList(string UserId, string WishListName)
+        {
+            List<WishListDTO> Items = _wlService.Get(new WishListFilterByUserIdAndName { UserId = UserId, Name = WishListName }).ToList();
+            return View(Items);
         }
 
         [HttpPost]

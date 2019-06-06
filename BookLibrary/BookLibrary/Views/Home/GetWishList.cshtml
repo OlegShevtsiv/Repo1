@@ -1,0 +1,39 @@
+﻿@using Services.DTO;
+@using Services.Interfaces;
+@{
+    ViewData["Title"] = "GetWishList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@inject IAuthorService authorService
+@inject IBookService bookService
+@model List<WishListDTO>
+<h2>@Model.First().Name</h2>
+<table class="table mt-5">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">#</th>
+            <th>Title</th>
+            <th>Year</th>
+            <th>Author Name</th>
+            <th>Author Surname</th>
+            <th>Rate</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{int i = 0;}
+        @foreach (var item in Model)
+        {
+            BookDTO book = bookService.Get(item.BookId);
+            i++;
+            <tr>
+                <th scope="row">@i</th>
+                <td>@book.Title</td>
+                <td>@book.Year</td>
+                <td>@authorService.Get(book.AuthorId).Name</td>
+                <td>@authorService.Get(book.AuthorId).Surname</td>
+                <td>@book.Rate</td>
+            </tr>
+        }
+
+</table>
+

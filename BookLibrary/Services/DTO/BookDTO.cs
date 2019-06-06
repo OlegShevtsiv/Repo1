@@ -7,9 +7,7 @@ namespace Services.DTO
         public string Id { get; set; }
         public string Title { get; set; }
         public string AuthorId { get; set; }
-
         public int Year { get; set; }
-
         public byte[] Image { get; set; }
         public byte[] FileBook { get; set; }
         public decimal Rate { get; set; }

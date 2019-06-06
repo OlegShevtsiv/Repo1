@@ -48,8 +48,6 @@ namespace Services.Interfaces
             return entities.Select(e => MapToDto(e));
         }
 
-
-
         public override IEnumerable<WishListDTO> GetAll()
         {
             List<WishList> entities = Repository
@@ -176,15 +174,21 @@ namespace Services.Interfaces
                     result += e => e.BookId == (filter as WishListFilterByBookId).BookId;
                 }
             }
+            else if (filter is WishListFilterByUserIdAndName)
+            {
+                if (!String.IsNullOrEmpty((filter as WishListFilterByUserIdAndName)?.UserId)
+                    && !String.IsNullOrEmpty((filter as WishListFilterByUserIdAndName)?.Name))
+                {
+                    result += e => (e.UserId == (filter as WishListFilterByUserIdAndName).UserId) && (e.Name == (filter as WishListFilterByUserIdAndName).Name);
+                }
+            }
             else if (filter is WishListFullFilter)
             {
                 if (!String.IsNullOrEmpty((filter as WishListFullFilter)?.BookId) 
                     && !String.IsNullOrEmpty((filter as WishListFullFilter)?.UserId) 
                     && !String.IsNullOrEmpty((filter as WishListFullFilter)?.Name))
                 {
-                    result += e => e.BookId == (filter as WishListFullFilter).BookId;
-                    result += e => e.UserId == (filter as WishListFullFilter).UserId;
-                    result += e => e.Name == (filter as WishListFullFilter).Name;
+                    result += e => (e.BookId == (filter as WishListFullFilter).BookId) && (e.UserId == (filter as WishListFullFilter).UserId) && (e.Name == (filter as WishListFullFilter).Name);
                 }
             }
             return result;
