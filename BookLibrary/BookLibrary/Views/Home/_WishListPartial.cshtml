@@ -1,0 +1,57 @@
+﻿@using Services.Interfaces;
+@using Services.Filters;
+@inject IWishListService _wlService
+
+@model Services.DTO.WishListDTO
+<form asp-action="AddToWishList" asp-controller="Home" method="post" class="d-flex">
+    <div class="form-group">
+        <input type="hidden" asp-for="@Model.UserId" />
+    </div>
+
+    <div class="form-group">
+        <input type="hidden" asp-for="@Model.BookId" />
+    </div>
+
+    <div class="form-group mb-2 d-flex align-items-center ml-3">
+        <input type="submit" value="Add to" class="btn btn-sm btn-primary" />
+    </div>
+
+    <div class="form-group pt-3">
+        <select type="text" asp-for="@Model.Name" class="form-control form-control-lg rate-select">
+            @{
+                List<string> Names = new List<string>();
+                foreach (var n in _wlService.Get(new WishListFilterByUserId { UserId = Model.UserId }))
+                {
+                    Names.Add(n.Name);
+                }
+                Names = Names.Distinct().ToList();
+                if (!Names.Any())
+                {
+                    <option value="Default">Default</option>
+                }
+                foreach (string n in Names)
+                {
+                    <option value="@n">@n</option>
+                }
+            }
+        </select>
+    </div>
+
+</form>
+
+<form asp-action="AddToWishList" asp-controller="Home" method="post" class="d-flex">
+    <div class="form-group">
+        <input type="hidden" asp-for="@Model.UserId" />
+    </div>
+
+    <div class="form-group">
+        <input type="hidden" asp-for="@Model.BookId" />
+    </div>
+
+    <div class="form-group pt-3">
+        <input type="text" asp-for="@Model.Name" class="form-control" />
+    </div>
+    <div class="form-group mb-2 d-flex align-items-center ml-3">
+        <input type="submit" value="Create & add" class="btn btn-sm btn-success" />
+    </div>
+</form>
